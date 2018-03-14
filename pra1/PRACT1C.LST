@@ -1,0 +1,95 @@
+Turbo Assembler	 Version 2.0	    03/14/18 17:06:13	    Page 1
+pract1c.asm
+
+
+
+      1				     ;**************************************************************************
+      2				     ; SBM 2015. ESTRUCTURA BÁSICA DE UN PROGRAMA EN ENSAMBLADOR
+      3				     ;**************************************************************************
+      4				     ; DEFINICION DEL SEGMENTO DE DATOS
+      5	0000			     DATOS SEGMENT
+      6	0000			     DATOS ENDS
+      7
+      8				     ;**************************************************************************
+      9				     ; DEFINICION DEL SEGMENTO DE PILA
+     10	0000			     PILA SEGMENT STACK	"STACK"
+     11	0000  40*(00)			     DB	40H DUP	(0) ;ejemplo de	inicialización, 64 bytes inicializados	a 0
+     12	0040			     PILA ENDS
+     13
+     14				     ;**************************************************************************
+     15				     ; DEFINICION DEL SEGMENTO EXTRA
+     16	0000			     EXTRA SEGMENT
+     17	0000  0000 0000			     RESULT DW 0,0 ;ejemplo de inicialización.	2 PALABRAS (4 BYTES)
+     18	0004			     EXTRA ENDS
+     19
+     20				     ;**************************************************************************
+     21				     ; DEFINICION DEL SEGMENTO DE CODIGO
+     22	0000			     CODE SEGMENT
+     23					     ASSUME CS:	CODE, DS: DATOS, ES: EXTRA, SS:	PILA
+     24
+     25				     ; COMIENZO	DEL PROCEDIMIENTO PRINCIPAL
+     26	0000			     INICIO PROC
+     27
+     28					     ; INICIALIZA LOS REGISTROS	DE SEGMENTO CON	SU VALOR
+     29	0000  B8 0000s			     MOV AX, DATOS
+     30	0003  8E D8			     MOV DS, AX
+     31	0005  B8 0000s			     MOV AX, PILA
+     32	0008  8E D0			     MOV SS, AX
+     33	000A  B8 0000s			     MOV AX, EXTRA
+     34	000D  8E C0			     MOV ES, AX
+     35	000F  BC 0040			     MOV SP, 64	; CARGA	EL PUNTERO DE PILA CON EL VALOR	MAS ALTO
+     36					     ; FIN DE LAS INICIALIZACIONES
+     37
+     38					     ; COMIENZO	DEL PROGRAMA
+     39					     ; Inicialización de DS, BX y DI
+     40	0012  B8 0535			     MOV AX, 0535H
+     41	0015  8E D8			     MOV DS, AX
+     42	0017  B8 0210			     MOV AX, 0210H
+     43	001A  8B D8			     MOV BX, AX
+     44	001C  B8 1011			     MOV AX, 1011H
+     45	001F  8B F8			     MOV DI, AX
+     46
+     47	0021  A0 1234			     MOV AL, BYTE PTR DS:[1234H] ; Accede a la dirección de memoria 6584H
+     48	0024  8B 07			     MOV AX, DS:[BX] ; Accede a	la dirección de memoria 5560H
+     49	0026  88 05			     MOV BYTE PTR DS:[DI], AL ;	Accede a la posición de memoria 6361H
+     50
+     51					     ; FIN DEL PROGRAMA
+     52
+     53	0028  B8 4C00			     MOV AX, 4C00H
+     54	002B  CD 21			     INT 21H
+     55	002D			     INICIO ENDP
+     56				     ; FIN DEL SEGMENTO	DE CODIGO
+     57	002D			     CODE ENDS
+Turbo Assembler	 Version 2.0	    03/14/18 17:06:13	    Page 2
+pract1c.asm
+
+
+
+     58				     ; FIN DEL PROGRAMA	INDICANDO DONDE	COMIENZA LA EJECUCION
+     59				     END INICIO
+Turbo Assembler	 Version 2.0	    03/14/18 17:06:13	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "03/14/18"
+??FILENAME			  Text	 "pract1c "
+??TIME				  Text	 "17:06:13"
+??VERSION			  Number 0200
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 PRACT1C
+@WORDSIZE			  Text	 2
+INICIO				  Near	 CODE:0000
+RESULT				  Word	 EXTRA:0000
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  002D Para	  none
+DATOS				  16  0000 Para	  none
+EXTRA				  16  0004 Para	  none
+PILA				  16  0040 Para	  Stack	  STACK
+

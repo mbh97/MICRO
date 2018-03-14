@@ -1,0 +1,99 @@
+Turbo Assembler	 Version 2.0	    03/14/18 16:59:57	    Page 1
+pract1a.asm
+
+
+
+      1				     ;**************************************************************************
+      2				     ; SBM 2015. ESTRUCTURA BÁSICA DE UN PROGRAMA EN ENSAMBLADOR
+      3				     ;**************************************************************************
+      4				     ; DEFINICION DEL SEGMENTO DE DATOS
+      5	0000			     DATOS SEGMENT
+      6					     ;-- rellenar con los datos	solicitados
+      7	0000			     DATOS ENDS
+      8
+      9				     ;**************************************************************************
+     10				     ; DEFINICION DEL SEGMENTO DE PILA
+     11	0000			     PILA SEGMENT STACK	"STACK"
+     12	0000  40*(00)		     DB	40H DUP	(0) ;ejemplo de	inicialización, 64 bytes inicializados	a 0
+     13	0040			     PILA ENDS
+     14
+     15				     ;**************************************************************************
+     16				     ; DEFINICION DEL SEGMENTO EXTRA
+     17	0000			     EXTRA SEGMENT
+     18	0000  0000 0000		     RESULT DW 0,0 ;ejemplo de inicialización.	2 PALABRAS (4 BYTES)
+     19	0004			     EXTRA ENDS
+     20
+     21				     ;**************************************************************************
+     22				     ; DEFINICION DEL SEGMENTO DE CODIGO
+     23	0000			     CODE SEGMENT
+     24				     ASSUME CS:	CODE, DS: DATOS, ES: EXTRA, SS:	PILA
+     25
+     26				     ; COMIENZO	DEL PROCEDIMIENTO PRINCIPAL
+     27	0000			     INICIO PROC
+     28
+     29					     ; INICIALIZA LOS REGISTROS	DE SEGMENTO CON	SU VALOR
+     30	0000  B8 0000s			     MOV AX, DATOS
+     31	0003  8E D8			     MOV DS, AX
+     32	0005  B8 0000s			     MOV AX, PILA
+     33	0008  8E D0			     MOV SS, AX
+     34	000A  B8 0000s			     MOV AX, EXTRA
+     35	000D  8E C0			     MOV ES, AX
+     36	000F  BC 0040			     MOV SP, 64	; CARGA	EL PUNTERO DE PILA CON EL VALOR	MAS ALTO
+     37					     ; FIN DE LAS INICIALIZACIONES
+     38
+     39					     ; COMIENZO	DEL PROGRAMA
+     40	0012  B8 0015			     MOV AX, 15H ; CARGA 15H EN	AX
+     41	0015  BB 00BB			     MOV BX, 0BBH ; CARGA BBH EN BX
+     42	0018  B9 3412			     MOV CX, 3412H ; CARGA 3412H EN CX
+     43	001B  8B D1			     MOV DX, CX	; CARGA	EL CONTENIDO DE	CX EN DX
+     44					     ; CARGA CONTENIDO DE LA POSICIÓN DE MEMORIA 65636H Y 65637H EN BX
+     45	001D  B8 6000			     MOV AX, 6000H ; segmento
+     46	0020  8E C0			     MOV ES, AX
+     47	0022  26: 8B 1E	5636		     MOV BX, ES:[5636H]	; direccion física = segmento + offset
+     48					     ; CARGA EN	LA POSICION DE MEMORIA 50005H EL CONTENIDO DE CH
+     49	0027  B8 5000			     MOV AX, 5000H ; segmento
+     50	002A  8E D8			     MOV DS, AX
+     51	002C  88 2E 0005		     MOV BYTE PTR DS:[5H], CH ;	direccion física = segmento + offset
+     52	0030  8B 05			     MOV AX, [DI] ; CARGA EN AX	EL CONTENIDO DE	LA DIRECCION DE	MEMORIA	APUNTADA POR DI
+     53	0032  8B 5E 0A			     MOV BX, [BP+10] ;CARGA EN BX EL CONTENIDO DE LA DIRECCION DE MEMORIA QUE ESTÁ 10 BYTES+
+     54				     POR ENCIMA	DE LA DIRECCION	APUNTADA POR BP
+     55					     ; FIN DEL PROGRAMA
+     56
+     57	0035  B8 4C00			     MOV AX, 4C00H
+Turbo Assembler	 Version 2.0	    03/14/18 16:59:57	    Page 2
+pract1a.asm
+
+
+
+     58	0038  CD 21			     INT 21H
+     59	003A			     INICIO ENDP
+     60				     ; FIN DEL SEGMENTO	DE CODIGO
+     61	003A			     CODE ENDS
+     62				     ; FIN DEL PROGRAMA	INDICANDO DONDE	COMIENZA LA EJECUCION
+     63				     END INICIO
+Turbo Assembler	 Version 2.0	    03/14/18 16:59:57	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "03/14/18"
+??FILENAME			  Text	 "pract1a "
+??TIME				  Text	 "16:59:57"
+??VERSION			  Number 0200
+@CPU				  Text	 0101H
+@CURSEG				  Text	 CODE
+@FILENAME			  Text	 PRACT1A
+@WORDSIZE			  Text	 2
+INICIO				  Near	 CODE:0000
+RESULT				  Word	 EXTRA:0000
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+CODE				  16  003A Para	  none
+DATOS				  16  0000 Para	  none
+EXTRA				  16  0004 Para	  none
+PILA				  16  0040 Para	  Stack	  STACK
+
